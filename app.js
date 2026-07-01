@@ -1,5 +1,9 @@
 (() => {
   const hasWallpaperAudioApi = typeof window.wallpaperRegisterAudioListener === "function";
+  const hasWallpaperMediaApi =
+    typeof window.wallpaperRegisterMediaPropertiesListener === "function" ||
+    typeof window.wallpaperRegisterMediaThumbnailListener === "function" ||
+    typeof window.wallpaperRegisterMediaPlaybackListener === "function";
 
   const defaults = {
     backgroundImage: "assets/scene-clean-plate.webp",
@@ -85,6 +89,16 @@
   let mediaTimer = 0;
   let clockTimer = 0;
   let currentStatus = normalizeStatus(sampleStatus);
+  const wallpaperMedia = {
+    title: "",
+    artist: "",
+    albumArtist: "",
+    albumTitle: "",
+    app: "Wallpaper Engine",
+    thumbnail: "",
+    isPlaying: null,
+    status: "",
+  };
   const motion = { x: 0, y: 0, tx: 0, ty: 0 };
 
   function clamp(value, min, max) {
@@ -209,21 +223,28 @@
     clockTimer = window.setInterval(renderClock, 1000);
   }
 
+  function normalizeMediaImage(value) {
+    if (!value) return "";
+    const image = String(value).trim();
+    if (/^(data:|blob:|https?:|file:)/i.test(image)) return image;
+    return `data:image/png;base64,${image}`;
+  }
+
   function renderMedia(media) {
     const title = media?.title || media?.track || "System audio";
     const artist = media?.artist || media?.albumArtist || media?.app || "SMTC / local media";
     els.mediaTitle.textContent = title;
     els.mediaArtist.textContent = artist;
-    if (media?.thumbnail) {
-      els.albumArt.style.backgroundImage = `url("${media.thumbnail}")`;
-    } else if (media?.artUrl) {
-      els.albumArt.style.backgroundImage = `url("${media.artUrl}")`;
+    const image = normalizeMediaImage(media?.thumbnail || media?.artUrl);
+    if (image) {
+      els.albumArt.style.backgroundImage = `url(${JSON.stringify(image)})`;
     } else {
       els.albumArt.style.backgroundImage = "";
     }
   }
 
   async function refreshMedia() {
+    if (hasWallpaperMediaApi) return;
     try {
       const response = await fetch(cacheBustedUrl(settings.mediaUrl), { cache: "no-store" });
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -235,8 +256,53 @@
 
   function scheduleMediaRefresh() {
     window.clearInterval(mediaTimer);
+    if (hasWallpaperMediaApi) {
+      renderMedia(wallpaperMedia);
+      return;
+    }
     refreshMedia();
     mediaTimer = window.setInterval(refreshMedia, 10000);
+  }
+
+  function updateWallpaperMedia(partial) {
+    Object.assign(wallpaperMedia, partial);
+    renderMedia(wallpaperMedia);
+  }
+
+  function registerWallpaperMediaListeners() {
+    if (typeof window.wallpaperRegisterMediaStatusListener === "function") {
+      window.wallpaperRegisterMediaStatusListener((event) => {
+        if (event?.enabled === false) {
+          updateWallpaperMedia({ title: "", artist: "", thumbnail: "", status: "Disabled" });
+        }
+      });
+    }
+    if (typeof window.wallpaperRegisterMediaPropertiesListener === "function") {
+      window.wallpaperRegisterMediaPropertiesListener((event) => {
+        updateWallpaperMedia({
+          title: event?.title || "",
+          artist: event?.artist || event?.albumArtist || "",
+          albumArtist: event?.albumArtist || "",
+          albumTitle: event?.albumTitle || "",
+          app: "Wallpaper Engine media",
+        });
+      });
+    }
+    if (typeof window.wallpaperRegisterMediaThumbnailListener === "function") {
+      window.wallpaperRegisterMediaThumbnailListener((event) => {
+        updateWallpaperMedia({ thumbnail: event?.thumbnail || "" });
+      });
+    }
+    if (typeof window.wallpaperRegisterMediaPlaybackListener === "function") {
+      window.wallpaperRegisterMediaPlaybackListener((event) => {
+        const constants = window.wallpaperMediaIntegration || {};
+        const playingState = constants.PLAYBACK_PLAYING;
+        updateWallpaperMedia({
+          isPlaying: playingState === undefined ? null : event?.state === playingState,
+          status: String(event?.state ?? ""),
+        });
+      });
+    }
   }
 
   function renderTokenCalendar(days) {
@@ -623,6 +689,7 @@
   applySettings();
   scheduleRefresh();
   scheduleClock();
+  registerWallpaperMediaListeners();
   scheduleMediaRefresh();
   requestAnimationFrame(draw);
 })();

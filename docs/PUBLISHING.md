@@ -6,7 +6,8 @@
 - Keep `agent-status.sample.json` for preview/demo data.
 - Keep the default Wallpaper Engine property:
   - `Agent 数据源 URL`: `http://127.0.0.1:47622/status`
-  - `媒体数据源 URL`: `http://127.0.0.1:47622/media`
+  - `媒体数据源 URL（浏览器预览 fallback）`: `http://127.0.0.1:47622/media`
+- Album art and track metadata should come from Wallpaper Engine's built-in media integration in the actual wallpaper runtime.
 - Include `install-autostart.cmd` so users can configure the local endpoint once.
 
 ## GitHub
@@ -34,7 +35,7 @@ codex, wallpaper-engine, dynamic-wallpaper, token-usage, desktop-widget, product
 Suggested release title:
 
 ```text
-v1.0.0 - Codex remaining usage on desktop
+v1.0.2 - Codex remaining usage on desktop
 ```
 
 Upload:

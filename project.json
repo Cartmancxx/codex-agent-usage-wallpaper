@@ -29,7 +29,7 @@
       },
       "media_data_url": {
         "type": "textinput",
-        "text": "媒体数据源 URL",
+        "text": "媒体数据源 URL（浏览器预览 fallback）",
         "value": "http://127.0.0.1:47622/media",
         "order": 11
       },

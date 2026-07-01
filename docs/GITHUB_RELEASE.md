@@ -1,4 +1,4 @@
-# Codex Agent Usage Visualizer v1.0.0
+# Codex Agent Usage Visualizer v1.0.2
 
 Wallpaper Engine Web wallpaper for Codex users.
 
@@ -10,11 +10,11 @@ Wallpaper Engine Web wallpaper for Codex users.
 - Local-only data reader: reads `~\.codex\sessions` rollout usage events, not auth files, cookies, or browser sessions.
 - Audio-responsive visualizer using Wallpaper Engine Web audio.
 - Layered 2.5D parallax scene with configurable background image.
-- Optional Windows SMTC/GSMTC clock/media overlay for current track title, artist, and album art.
+- Optional Wallpaper Engine media integration overlay for current track title, artist, and album art.
 
 ## Files
 
-- `codex-agent-wallpaper.zip`: release package.
+- `codex-agent-wallpaper-v1.0.2.zip`: release package.
 - `install-autostart.cmd`: one-time setup for the local Codex usage endpoint.
 - `start-codex-usage-server.cmd`: manually start the local endpoint.
 - `README.md`: setup and customization guide.
@@ -29,13 +29,8 @@ Wallpaper Engine Web wallpaper for Codex users.
 http://127.0.0.1:47622/status
 ```
 
-4. Keep `媒体数据源 URL` as:
-
-```text
-http://127.0.0.1:47622/media
-```
-
 The wallpaper will refresh usage every 300 seconds by default.
+Album art and track metadata are read through Wallpaper Engine's built-in media integration when the wallpaper runs inside Wallpaper Engine. The `媒体数据源 URL（浏览器预览 fallback）` property is only used outside Wallpaper Engine.
 
 ## Privacy
 

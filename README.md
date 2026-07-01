@@ -5,7 +5,7 @@
 - 音频响应：使用 Wallpaper Engine 的 Web 音频监听接口读取频段数据，轻微驱动背景明暗、饱和度和环境光。
 - 可替换图片：在 Wallpaper Engine 属性面板里选择“背景图片”，支持铺满、完整显示、拉伸。
 - Agent 用量面板：通过 JSON/HTTP 数据源显示 Codex 5 小时窗口和 1 周窗口的剩余用量百分比、重置时间、近 30 天 Token 日历热力图、累计 Token 和今日 Token。
-- 时间/媒体层：通过 Windows SMTC/GSMTC 读取当前系统媒体会话，显示时间、标题、歌手和封面；没有正在播放的媒体时显示 fallback。
+- 时间/媒体层：在 Wallpaper Engine 内通过官方媒体集成读取当前播放的标题、歌手和封面；没有正在播放的媒体时显示 fallback。
 
 ## 导入 Wallpaper Engine
 
@@ -77,15 +77,15 @@ powershell -ExecutionPolicy Bypass -File .\tools\run-codex-usage-export.ps1 -Ser
 http://127.0.0.1:47622/status
 ```
 
-同一个服务还会提供媒体接口：
+媒体封面不依赖这个本地服务。Wallpaper Engine 环境内会优先使用官方媒体集成 API 读取当前播放信息和封面。这个本地服务仍保留一个浏览器预览 fallback 接口：
 
 ```text
 http://127.0.0.1:47622/media
 ```
 
-它调用 Windows 的 `GlobalSystemMediaTransportControlsSessionManager`，也就是常说的 SMTC/GSMTC。Spotify、网易云、Edge/Chrome 播放器等只要把当前播放状态暴露给 Windows 媒体控制，壁纸就能读到标题、歌手和封面。
+这个 fallback 会尝试调用 Windows 的 `GlobalSystemMediaTransportControlsSessionManager`，也就是常说的 SMTC/GSMTC。不同 Windows 环境可能会因为系统服务或权限状态读不到，所以正式在 Wallpaper Engine 里显示封面时不依赖它。
 
-如果你改了服务端口，同时把 Wallpaper Engine 属性面板里的“媒体数据源 URL”改到同一个端口。
+如果你只是在普通浏览器里预览，并且改了服务端口，可以把 Wallpaper Engine 属性面板里的“媒体数据源 URL（浏览器预览 fallback）”改到同一个端口。
 
 只配置一次、以后自动运行：
 

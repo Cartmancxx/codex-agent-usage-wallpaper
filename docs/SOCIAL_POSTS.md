@@ -28,7 +28,7 @@
 
 - 背景音频响应
 - 鼠标移动的 2.5D 视差背景
-- 上方偏中左时间 + 当前播放信息
+- 上方偏中左时间 + 当前播放信息，封面走 Wallpaper Engine 内置媒体集成
 - 可以自己换背景图
 
 本地数据是从 Codex App 写在电脑里的 usage/rate-limit 记录读取的，只读 `~/.codex/sessions`，不读取登录凭据、cookie 或浏览器状态。
@@ -79,7 +79,7 @@ The useful part: it shows Codex remaining usage directly on the desktop, includi
 - total tokens
 - today's tokens
 
-It also has a subtle audio-reactive background, a layered 2.5D parallax scene, configurable background image, and a Windows SMTC clock/media overlay.
+It also has a subtle audio-reactive background, a layered 2.5D parallax scene, configurable background image, and a Wallpaper Engine clock/media overlay with album art.
 
 The local adapter only reads Codex usage/rate-limit events from `~/.codex/sessions`. It does not read auth files, cookies, browser state, or account credentials.
 
