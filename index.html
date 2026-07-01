@@ -17,11 +17,16 @@
       <canvas id="audioCanvas" aria-hidden="true"></canvas>
 
       <section id="mediaWidget" class="media-widget" aria-label="Now playing">
-        <div id="albumArt" class="album-art"></div>
-        <div class="media-copy">
-          <span id="mediaStatus">NOW PLAYING</span>
-          <strong id="mediaTitle">System audio</strong>
-          <small id="mediaArtist">SMTC / local media</small>
+        <div class="clock-copy">
+          <time id="clockTime">--:--</time>
+          <span id="clockDate">--</span>
+        </div>
+        <div class="media-row">
+          <div id="albumArt" class="album-art"></div>
+          <div class="media-copy">
+            <strong id="mediaTitle">System audio</strong>
+            <small id="mediaArtist">SMTC / local media</small>
+          </div>
         </div>
       </section>
 

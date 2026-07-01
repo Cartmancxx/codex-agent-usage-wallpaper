@@ -2,16 +2,16 @@
 
 这是一个 Wallpaper Engine Web 动态壁纸工程，已包含：
 
-- 音频响应：使用 Wallpaper Engine 的 Web 音频监听接口读取频段数据，驱动底部频谱、流动波形、粒子和背景缩放。
+- 音频响应：使用 Wallpaper Engine 的 Web 音频监听接口读取频段数据，轻微驱动背景明暗、饱和度和环境光。
 - 可替换图片：在 Wallpaper Engine 属性面板里选择“背景图片”，支持铺满、完整显示、拉伸。
 - Agent 用量面板：通过 JSON/HTTP 数据源显示 Codex 5 小时窗口和 1 周窗口的剩余用量百分比、重置时间、近 30 天 Token 日历热力图、累计 Token 和今日 Token。
-- 媒体播放器：通过 Windows SMTC/GSMTC 读取当前系统媒体会话，显示标题、歌手和封面；没有正在播放的媒体时显示 fallback。
+- 时间/媒体层：通过 Windows SMTC/GSMTC 读取当前系统媒体会话，显示时间、标题、歌手和封面；没有正在播放的媒体时显示 fallback。
 
 ## 导入 Wallpaper Engine
 
 1. 打开 Wallpaper Engine 编辑器。
 2. 创建 Web 壁纸，选择本文件夹里的 `index.html`；也可以把整个 `codex-agent-wallpaper` 文件夹拖入编辑器。
-3. 在属性面板里设置背景图片、Agent 数据源 URL、刷新间隔、面板位置和颜色。默认刷新间隔是 300 秒。
+3. 在属性面板里设置背景图片、Agent 数据源 URL、刷新间隔、面板位置、时间/播放器位置和颜色。默认刷新间隔是 300 秒。
 4. 发布或应用到桌面。
 
 项目入口是 `index.html`，Wallpaper Engine 配置在 `project.json`。其中 `general.supportsaudioprocessing` 已开启，音频动画代码在 `app.js` 里。

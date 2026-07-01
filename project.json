@@ -39,6 +39,24 @@
         "value": "Codex",
         "order": 12
       },
+      "media_x_percent": {
+        "type": "slider",
+        "text": "时间/播放器水平位置（屏宽%）",
+        "value": 18,
+        "min": 10,
+        "max": 32,
+        "fraction": false,
+        "order": 13
+      },
+      "media_y_percent": {
+        "type": "slider",
+        "text": "时间/播放器垂直位置（屏高%）",
+        "value": 7,
+        "min": 4,
+        "max": 22,
+        "fraction": false,
+        "order": 14
+      },
       "poll_seconds": {
         "type": "slider",
         "text": "刷新间隔（秒）",
@@ -46,13 +64,13 @@
         "min": 30,
         "max": 600,
         "fraction": false,
-        "order": 13
+        "order": 15
       },
       "show_tokens": {
         "type": "bool",
         "text": "显示 Token",
         "value": true,
-        "order": 14
+        "order": 16
       },
       "panel_position": {
         "type": "combo",
@@ -83,7 +101,7 @@
       },
       "visualizer_intensity": {
         "type": "slider",
-        "text": "音频响应强度",
+        "text": "背景音频响应强度",
         "value": 0.78,
         "min": 0,
         "max": 1.5,

@@ -10,7 +10,7 @@ Wallpaper Engine Web wallpaper for Codex users.
 - Local-only data reader: reads `~\.codex\sessions` rollout usage events, not auth files, cookies, or browser sessions.
 - Audio-responsive visualizer using Wallpaper Engine Web audio.
 - Layered 2.5D parallax scene with configurable background image.
-- Optional Windows SMTC/GSMTC media card for current track title, artist, and album art.
+- Optional Windows SMTC/GSMTC clock/media overlay for current track title, artist, and album art.
 
 ## Files
 

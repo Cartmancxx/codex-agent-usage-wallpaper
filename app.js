@@ -9,6 +9,8 @@
     dataUrl: "agent-status.sample.json",
     mediaUrl: "http://127.0.0.1:47622/media",
     providerName: "Codex",
+    mediaXPercent: 18,
+    mediaYPercent: 7,
     weeklyLimitHours: 5,
     pollSeconds: 300,
     showTokens: true,
@@ -65,8 +67,9 @@
     tokenBlock: document.getElementById("tokenBlock"),
     updatedAt: document.getElementById("updatedAt"),
     dataHealth: document.getElementById("dataHealth"),
+    clockTime: document.getElementById("clockTime"),
+    clockDate: document.getElementById("clockDate"),
     albumArt: document.getElementById("albumArt"),
-    mediaStatus: document.getElementById("mediaStatus"),
     mediaTitle: document.getElementById("mediaTitle"),
     mediaArtist: document.getElementById("mediaArtist"),
   };
@@ -78,9 +81,9 @@
     lastRealFrame: 0,
   };
 
-  let particles = [];
   let refreshTimer = 0;
   let mediaTimer = 0;
+  let clockTimer = 0;
   let currentStatus = normalizeStatus(sampleStatus);
   const motion = { x: 0, y: 0, tx: 0, ty: 0 };
 
@@ -186,12 +189,31 @@
     motion.ty = clamp((event.clientY / height - 0.5) * 2, -1, 1);
   }
 
+  function renderClock() {
+    const now = new Date();
+    els.clockTime.textContent = new Intl.DateTimeFormat("zh-CN", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }).format(now);
+    els.clockDate.textContent = new Intl.DateTimeFormat("en", {
+      weekday: "short",
+      month: "short",
+      day: "2-digit",
+    }).format(now);
+  }
+
+  function scheduleClock() {
+    window.clearInterval(clockTimer);
+    renderClock();
+    clockTimer = window.setInterval(renderClock, 1000);
+  }
+
   function renderMedia(media) {
     const title = media?.title || media?.track || "System audio";
     const artist = media?.artist || media?.albumArtist || media?.app || "SMTC / local media";
     els.mediaTitle.textContent = title;
     els.mediaArtist.textContent = artist;
-    els.mediaStatus.textContent = media?.isPlaying === false ? "PAUSED" : "NOW PLAYING";
     if (media?.thumbnail) {
       els.albumArt.style.backgroundImage = `url("${media.thumbnail}")`;
     } else if (media?.artUrl) {
@@ -445,6 +467,8 @@
   function applySettings() {
     document.documentElement.style.setProperty("--accent-rgb", settings.accentRgb.join(" "));
     document.documentElement.style.setProperty("--panel-bg", `rgb(10 12 17 / ${settings.panelOpacity})`);
+    document.documentElement.style.setProperty("--media-left", `clamp(160px, ${settings.mediaXPercent}vw, 520px)`);
+    document.documentElement.style.setProperty("--media-top", `clamp(36px, ${settings.mediaYPercent}vh, 120px)`);
     const backgroundUrl = wallpaperFileUrl(settings.backgroundImage);
     const usesDefaultLayeredScene = settings.backgroundImage === defaults.backgroundImage;
     els.bg.src = backgroundUrl;
@@ -463,6 +487,8 @@
     const panelPosition = readProp(properties, "panel_position");
     const dataUrl = readProp(properties, "agent_data_url");
     const mediaUrl = readProp(properties, "media_data_url");
+    const mediaXPercent = readProp(properties, "media_x_percent");
+    const mediaYPercent = readProp(properties, "media_y_percent");
     const providerName = readProp(properties, "provider_name");
     const weeklyLimitHours = readProp(properties, "weekly_limit_hours");
     const pollSeconds = readProp(properties, "poll_seconds");
@@ -477,6 +503,12 @@
     if (panelPosition !== undefined) settings.panelPosition = panelPosition;
     if (dataUrl !== undefined) settings.dataUrl = dataUrl || "";
     if (mediaUrl !== undefined) settings.mediaUrl = mediaUrl || defaults.mediaUrl;
+    if (mediaXPercent !== undefined) {
+      settings.mediaXPercent = clamp(Number(mediaXPercent) || defaults.mediaXPercent, 10, 32);
+    }
+    if (mediaYPercent !== undefined) {
+      settings.mediaYPercent = clamp(Number(mediaYPercent) || defaults.mediaYPercent, 4, 22);
+    }
     if (providerName !== undefined) settings.providerName = providerName || defaults.providerName;
     if (weeklyLimitHours !== undefined) settings.weeklyLimitHours = Number(weeklyLimitHours) || defaults.weeklyLimitHours;
     if (pollSeconds !== undefined) settings.pollSeconds = Number(pollSeconds) || defaults.pollSeconds;
@@ -514,20 +546,7 @@
       els.canvas.style.width = `${window.innerWidth}px`;
       els.canvas.style.height = `${window.innerHeight}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      buildParticles();
     }
-  }
-
-  function buildParticles() {
-    const count = Math.round(clamp(window.innerWidth / 24, 42, 96));
-    particles = Array.from({ length: count }, (_, index) => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      r: 0.8 + Math.random() * 2.4,
-      speed: 0.18 + Math.random() * 0.85,
-      phase: index * 0.37 + Math.random() * 6,
-      color: Math.random() > 0.72 ? "amber" : Math.random() > 0.5 ? "accent" : "rose",
-    }));
   }
 
   function simulateAudio(now) {
@@ -574,72 +593,23 @@
     const width = window.innerWidth;
     const height = window.innerHeight;
     const intensity = settings.visualizerIntensity;
-    const { bass, mid, treble, energy } = audio.bands;
-    const accent = `rgb(${settings.accentRgb.join(" ")})`;
+    const { bass, mid, energy } = audio.bands;
 
     ctx.clearRect(0, 0, width, height);
-    ctx.save();
-    ctx.globalCompositeOperation = "lighter";
 
-    els.bg.style.filter = `brightness(${1.08 + mid * 0.04}) saturate(${1.16 + mid * 0.18}) contrast(${1.06 + bass * 0.08})`;
+    els.bg.style.filter = `brightness(${1.08 + energy * 0.035 * intensity}) saturate(${1.16 + mid * 0.12 * intensity}) contrast(${1.06 + bass * 0.05 * intensity})`;
+    els.sceneDepth.style.opacity = (0.1 + energy * 0.045 * intensity).toFixed(3);
     applyMotion();
 
-    const bars = 64;
-    const barWidth = width / bars;
-    for (let i = 0; i < bars; i += 1) {
-      const left = audio.raw[i] || 0;
-      const right = audio.raw[i + 64] || 0;
-      const value = clamp((left + right) * 0.5, 0, 1);
-      const barHeight = Math.max(3, value * height * 0.34 * intensity);
-      const x = i * barWidth;
-      const hueBlend = i / bars;
-      ctx.fillStyle =
-        hueBlend < 0.35
-          ? `rgb(${settings.accentRgb.join(" ")} / ${0.22 + value * 0.45})`
-          : hueBlend < 0.72
-            ? `rgb(246 189 96 / ${0.18 + value * 0.42})`
-            : `rgb(242 132 130 / ${0.16 + value * 0.34})`;
-      ctx.fillRect(x + 1, height - barHeight - 24, Math.max(1, barWidth - 2), barHeight);
-    }
-
-    ctx.lineWidth = 1.4 + bass * 2.6;
-    ctx.strokeStyle = `rgb(${settings.accentRgb.join(" ")} / ${0.16 + energy * 0.42})`;
-    ctx.beginPath();
-    for (let x = 0; x <= width; x += 18) {
-      const y =
-        height * 0.58 +
-        Math.sin(x * 0.009 + now * 0.0018) * (28 + bass * 80) * intensity +
-        Math.sin(x * 0.021 - now * 0.0012) * (10 + treble * 38) * intensity;
-      if (x === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    for (const particle of particles) {
-      particle.y -= particle.speed + bass * 1.6 * intensity;
-      particle.x += Math.sin(now * 0.001 + particle.phase) * (0.16 + treble * 0.5);
-      if (particle.y < -8) {
-        particle.y = height + 8;
-        particle.x = Math.random() * width;
-      }
-
-      const alpha = 0.18 + energy * 0.34 + Math.sin(now * 0.002 + particle.phase) * 0.06;
-      if (particle.color === "accent") ctx.fillStyle = `rgb(${settings.accentRgb.join(" ")} / ${alpha})`;
-      else if (particle.color === "amber") ctx.fillStyle = `rgb(246 189 96 / ${alpha})`;
-      else ctx.fillStyle = `rgb(242 132 130 / ${alpha})`;
-
-      ctx.beginPath();
-      ctx.arc(particle.x, particle.y, particle.r + mid * 2.2, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    const glow = ctx.createRadialGradient(width * 0.18, height * 0.28, 0, width * 0.18, height * 0.28, width * 0.5);
-    glow.addColorStop(0, `rgb(${settings.accentRgb.join(" ")} / ${0.05 + energy * 0.14})`);
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    const glowStrength = (0.035 + energy * 0.085) * intensity;
+    const glow = ctx.createRadialGradient(width * 0.38, height * 0.34, 0, width * 0.38, height * 0.34, width * 0.72);
+    glow.addColorStop(0, `rgb(${settings.accentRgb.join(" ")} / ${glowStrength})`);
+    glow.addColorStop(0.5, `rgb(246 189 96 / ${glowStrength * 0.34})`);
     glow.addColorStop(1, "rgb(0 0 0 / 0)");
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, width, height);
-
-    ctx.fillStyle = accent;
     ctx.restore();
     requestAnimationFrame(draw);
   }
@@ -652,6 +622,7 @@
   });
   applySettings();
   scheduleRefresh();
+  scheduleClock();
   scheduleMediaRefresh();
   requestAnimationFrame(draw);
 })();
