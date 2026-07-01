@@ -1,2 +1,0 @@
-Codex/GitHub connector write permission test.
-This temporary file can be deleted after verification.
