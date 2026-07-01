@@ -1,0 +1,106 @@
+{
+  "file": "index.html",
+  "general": {
+    "supportsaudioprocessing": true,
+    "properties": {
+      "background_image": {
+        "type": "file",
+        "text": "背景图片",
+        "value": "",
+        "fileType": "image",
+        "order": 1
+      },
+      "background_fit": {
+        "type": "combo",
+        "text": "图片填充方式",
+        "value": "cover",
+        "options": [
+          { "value": "cover", "label": "铺满" },
+          { "value": "contain", "label": "完整显示" },
+          { "value": "fill", "label": "拉伸" }
+        ],
+        "order": 2
+      },
+      "agent_data_url": {
+        "type": "textinput",
+        "text": "Agent 数据源 URL",
+        "value": "http://127.0.0.1:47622/status",
+        "order": 10
+      },
+      "media_data_url": {
+        "type": "textinput",
+        "text": "媒体数据源 URL",
+        "value": "http://127.0.0.1:47622/media",
+        "order": 11
+      },
+      "provider_name": {
+        "type": "textinput",
+        "text": "默认 Agent 名称",
+        "value": "Codex",
+        "order": 12
+      },
+      "poll_seconds": {
+        "type": "slider",
+        "text": "刷新间隔（秒）",
+        "value": 300,
+        "min": 30,
+        "max": 600,
+        "fraction": false,
+        "order": 13
+      },
+      "show_tokens": {
+        "type": "bool",
+        "text": "显示 Token",
+        "value": true,
+        "order": 14
+      },
+      "panel_position": {
+        "type": "combo",
+        "text": "面板位置",
+        "value": "right",
+        "options": [
+          { "value": "right", "label": "右侧" },
+          { "value": "left", "label": "左侧" },
+          { "value": "center", "label": "居中" },
+          { "value": "hidden", "label": "隐藏" }
+        ],
+        "order": 20
+      },
+      "accent_color": {
+        "type": "color",
+        "text": "强调色",
+        "value": "0.298 0.839 0.761",
+        "order": 21
+      },
+      "panel_opacity": {
+        "type": "slider",
+        "text": "面板透明度",
+        "value": 0.72,
+        "min": 0.2,
+        "max": 0.95,
+        "fraction": true,
+        "order": 22
+      },
+      "visualizer_intensity": {
+        "type": "slider",
+        "text": "音频响应强度",
+        "value": 0.78,
+        "min": 0,
+        "max": 1.5,
+        "fraction": true,
+        "order": 23
+      },
+      "test_mode": {
+        "type": "bool",
+        "text": "测试音频动画",
+        "value": false,
+        "order": 24
+      }
+    }
+  },
+  "preview": "assets/preview.png",
+  "title": "Codex Agent Usage Visualizer",
+  "type": "web",
+  "version": 1,
+  "visibility": "private"
+}

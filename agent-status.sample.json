@@ -1,0 +1,52 @@
+{
+  "provider": "Codex",
+  "updatedAt": "2026-06-30T20:20:00+08:00",
+  "quota": {
+    "mode": "percent",
+    "label": "1周",
+    "usedPercent": 31,
+    "remainingPercent": 69,
+    "resetsAt": "2026-07-07T14:01:00+08:00",
+    "windows": [
+      {
+        "label": "5小时",
+        "usedPercent": 26,
+        "remainingPercent": 74,
+        "resetsAt": "2026-07-01T14:01:00+08:00"
+      },
+      {
+        "label": "1周",
+        "usedPercent": 31,
+        "remainingPercent": 69,
+        "resetsAt": "2026-07-07T14:01:00+08:00"
+      }
+    ]
+  },
+  "tokens": {
+    "week": 184320,
+    "month": 923760,
+    "today": 38210,
+    "total": 4289000,
+    "daily": [
+      { "date": "2026-06-24", "tokens": 51200 },
+      { "date": "2026-06-25", "tokens": 128400 },
+      { "date": "2026-06-26", "tokens": 0 },
+      { "date": "2026-06-27", "tokens": 80300 },
+      { "date": "2026-06-28", "tokens": 212000 },
+      { "date": "2026-06-29", "tokens": 146110 },
+      { "date": "2026-06-30", "tokens": 38210 }
+    ]
+  },
+  "agents": [
+    {
+      "name": "5小时 剩余用量",
+      "remainingPercent": 74,
+      "resetsAt": "2026-07-01T14:01:00+08:00"
+    },
+    {
+      "name": "1周 剩余用量",
+      "remainingPercent": 69,
+      "resetsAt": "2026-07-07T14:01:00+08:00"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "source_asset": {
+    "name": "DSCF2284_wallpaper_asset",
+    "size": {
+      "width": 7728,
+      "height": 5152
+    },
+    "notes": "Original delivery included clean plate, person layer, person masks, 16-bit depth map, 8-bit depth preview, QA contact sheet, and a parallax preview video."
+  },
+  "runtime_assets": [
+    {
+      "file": "assets/scene-clean-plate.webp",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 433762
+    },
+    {
+      "file": "assets/scene-person-layer.webp",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 68294
+    },
+    {
+      "file": "assets/scene-depth-preview.webp",
+      "width": 2560,
+      "height": 1707,
+      "bytes": 23240
+    },
+    {
+      "file": "assets/scene-asset-contact-sheet.jpg",
+      "width": 1280,
+      "height": 914,
+      "bytes": 258929
+    }
+  ],
+  "runtime_width": 2560,
+  "notes": "Downscaled runtime assets for Wallpaper Engine Web wallpaper. No local source paths are required at runtime."
+}

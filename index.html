@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codex Agent Wallpaper</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="wallpaper" data-panel-position="right">
+      <div id="scene" class="scene">
+        <img id="backgroundImage" class="background-image scene-layer scene-back" src="assets/scene-clean-plate.webp" alt="" />
+        <div class="scene-depth scene-layer" aria-hidden="true"></div>
+        <img class="scene-layer scene-person" src="assets/scene-person-layer.webp" alt="" aria-hidden="true" />
+      </div>
+      <div class="image-grade" aria-hidden="true"></div>
+      <canvas id="audioCanvas" aria-hidden="true"></canvas>
+
+      <section id="mediaWidget" class="media-widget" aria-label="Now playing">
+        <div id="albumArt" class="album-art"></div>
+        <div class="media-copy">
+          <span id="mediaStatus">NOW PLAYING</span>
+          <strong id="mediaTitle">System audio</strong>
+          <small id="mediaArtist">SMTC / local media</small>
+        </div>
+      </section>
+
+      <main id="agentPanel" class="agent-panel" aria-label="Agent usage">
+        <section class="identity-row">
+          <div>
+            <p class="eyebrow">AGENT STATUS</p>
+            <h1 id="providerName">Codex</h1>
+          </div>
+          <span id="liveState" class="live-state">LIVE</span>
+        </section>
+
+        <section class="quota-block" aria-label="Codex quota windows">
+          <div class="quota-line">
+            <div>
+              <span>5H 剩余用量</span>
+              <strong id="quota5hPercent">--</strong>
+            </div>
+            <time id="quota5hReset">--</time>
+            <div class="quota-bar" aria-hidden="true"><i id="quota5hBar"></i></div>
+          </div>
+          <div class="quota-line">
+            <div>
+              <span>7D 剩余用量</span>
+              <strong id="quota7dPercent">--</strong>
+            </div>
+            <time id="quota7dReset">--</time>
+            <div class="quota-bar" aria-hidden="true"><i id="quota7dBar"></i></div>
+          </div>
+        </section>
+
+        <section class="calendar-block" aria-label="Token calendar">
+          <div class="metric-head">
+            <span>Token 日历</span>
+            <strong id="calendarRange">最近 10 周</strong>
+          </div>
+          <div id="tokenCalendar" class="token-calendar" aria-hidden="true"></div>
+        </section>
+
+        <section id="tokenBlock" class="token-grid">
+          <div class="metric-tile">
+            <span>累计 Token</span>
+            <strong id="totalTokens">0</strong>
+          </div>
+          <div class="metric-tile">
+            <span>今日 Token</span>
+            <strong id="todayTokens">0</strong>
+          </div>
+        </section>
+
+        <footer class="panel-footer">
+          <span id="updatedAt">未更新</span>
+          <span id="dataHealth">sample</span>
+        </footer>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

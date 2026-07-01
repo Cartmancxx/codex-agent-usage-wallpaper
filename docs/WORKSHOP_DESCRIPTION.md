@@ -1,0 +1,46 @@
+# Codex Agent Usage Visualizer
+
+把 Codex 剩余额度直接放到桌面上的 Wallpaper Engine 动态壁纸。
+
+## 功能
+
+- 桌面右上角显示 Codex 剩余用量。
+- 同时显示 5H 和 7D 两个额度窗口：剩余百分比 + 重置时间。
+- 近 30 天 Token 日历热力图。
+- 累计 Token / 今日 Token。
+- 音频响应频谱、粒子和波形。
+- 2.5D 分层视差背景，支持鼠标移动。
+- 右下角媒体播放器，支持 Windows SMTC/GSMTC 标题、歌手、封面。
+- 可在 Wallpaper Engine 属性里替换背景图片、调整刷新间隔、颜色和透明度。
+
+## 使用方法
+
+首次使用需要运行一次随包附带的：
+
+```text
+install-autostart.cmd
+```
+
+它会在本机启动一个只监听 `127.0.0.1` 的本地服务：
+
+```text
+http://127.0.0.1:47622/status
+```
+
+Wallpaper Engine 属性里的 `Agent 数据源 URL` 默认已经指向这个地址。
+
+## 数据说明
+
+这个壁纸读取的是本机 Codex App 已缓存到 `~\.codex\sessions` 的 usage/rate-limit 事件：
+
+- 5H 剩余用量
+- 7D 剩余用量
+- 今日 Token
+- 累计 Token
+- 近 30 天 Token 日历
+
+它不会读取 Codex 登录凭据、cookie、浏览器状态或账号密码。
+
+## 适用人群
+
+适合经常用 Codex、想随时知道本周/5小时窗口还剩多少额度的人。
