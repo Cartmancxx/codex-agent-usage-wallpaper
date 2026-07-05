@@ -1,11 +1,37 @@
-# Codex Agent Usage Visualizer
+# AI Agent Usage Wallpaper / Codex Agent Usage Visualizer
 
-这是一个 Wallpaper Engine Web 动态壁纸工程，已包含：
+把 AI Agent 的剩余额度、Token 使用量和当前播放信息直接放到桌面上。  
+Turn your desktop into a live quota and token dashboard for Codex and other AI agents.
 
-- 音频响应：使用 Wallpaper Engine 的 Web 音频监听接口读取频段数据，轻微驱动背景明暗、饱和度和环境光。
-- 可替换图片：在 Wallpaper Engine 属性面板里选择“背景图片”，支持铺满、完整显示、拉伸。
-- Agent 用量面板：通过 JSON/HTTP 数据源显示 Codex 5 小时窗口和 1 周窗口的剩余用量百分比、重置时间、近 30 天 Token 日历热力图、累计 Token 和今日 Token。
-- 时间/媒体层：在 Wallpaper Engine 内通过官方媒体集成读取当前播放的标题、歌手和封面；没有正在播放的媒体时显示 fallback。
+![Preview](assets/preview.png)
+
+## 适合谁 / Who This Is For
+
+- 每天高频使用 Codex、Claude Code、Cursor、Gemini CLI、Aider 或自建 Agent 的人。
+- 想在桌面上一眼看到 5H / 7D 等限额窗口还剩多少的人。
+- 想记录 Token 使用节奏，把 AI 工具从“感觉快用完了”变成“我知道还剩多少”的人。
+- Anyone who wants a calm desktop dashboard for AI quota, token history, media artwork, and a little motion.
+
+## 亮点 / Highlights
+
+- **多 AI Agent 可接入 / Multi-agent ready**：内置 Codex 本地适配器，也支持任何 Agent 写入同样结构的 JSON 或 HTTP 数据源。
+- **桌面额度仪表盘 / Desktop quota dashboard**：显示 5H、7D 或自定义窗口的剩余百分比和重置时间。
+- **Token 日历 / Token calendar**：近 30 天 Token 使用热力图，像 GitHub contribution graph 一样扫一眼就懂。
+- **本地优先 / Local-first**：Codex 适配器只读本机 `~\.codex\sessions` usage/rate-limit 事件，不读登录凭据、cookie、浏览器状态或账号密码。
+- **Wallpaper Engine 原生媒体封面 / Native media artwork**：通过 Wallpaper Engine 官方媒体集成显示当前歌曲标题、歌手和封面。
+- **可替换壁纸 / Bring your own image**：支持替换背景图、调整图片填充、面板位置、时间/播放器位置、颜色和透明度。
+- **轻量动态效果 / Subtle motion**：音频只轻微驱动背景明暗、饱和度和环境光，不抢画面主体。
+
+## 多 Agent 接入 / Multi-Agent Data Sources
+
+默认包里已经包含 Codex 适配器，可以读取本地 Codex App 已缓存的 usage/rate-limit 事件。除此之外，任何工具都可以接入：
+
+- Claude Code / Cursor / Gemini CLI / Aider / OpenHands / 自己写的 Agent。
+- 写一个 `agent-status.local.json`。
+- 或者提供一个 HTTP endpoint，例如 `http://127.0.0.1:47622/status`。
+- 只要输出 README 下方的通用 JSON 结构，壁纸就能显示 provider、quota windows、daily tokens、total tokens 和 today tokens。
+
+This wallpaper is not locked to Codex. Codex is just the included adapter. Any local or remote agent can feed the same JSON schema and become the dashboard provider.
 
 ## 导入 Wallpaper Engine
 

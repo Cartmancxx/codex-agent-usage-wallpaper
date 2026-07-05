@@ -23,19 +23,19 @@ codex-agent-usage-wallpaper
 Suggested description:
 
 ```text
-Wallpaper Engine Web wallpaper that shows Codex 5H/7D remaining usage and token stats on your desktop.
+Desktop AI Agent quota and token dashboard for Codex, Claude Code, Cursor, and custom agents. Wallpaper Engine dynamic wallpaper.
 ```
 
 Suggested topics:
 
 ```text
-codex, wallpaper-engine, dynamic-wallpaper, token-usage, desktop-widget, productivity
+codex, ai-agent, claude-code, cursor, wallpaper-engine, dynamic-wallpaper, token-usage, quota-dashboard, desktop-widget, productivity
 ```
 
 Suggested release title:
 
 ```text
-v1.0.2 - Codex remaining usage on desktop
+v1.0.2 - AI Agent quota and token dashboard
 ```
 
 Upload:

@@ -1,13 +1,17 @@
 # Codex Agent Usage Visualizer v1.0.2
 
-Wallpaper Engine Web wallpaper for Codex users.
+Wallpaper Engine Web wallpaper for AI Agent power users and multi-agent workflows.
+
+中文：把 Codex 和其他 AI Agent 的剩余额度、Token 使用趋势、当前播放封面做成桌面动态壁纸。  
+English: A desktop AI quota and token dashboard for Codex, Claude Code, Cursor, Gemini CLI, Aider, and custom agents.
 
 ## Highlights
 
-- Show Codex remaining usage directly on the desktop wallpaper.
-- Display both Codex rate-limit windows: 5H and 7D remaining percentage plus reset time.
+- Show Codex or custom AI Agent remaining usage directly on the desktop wallpaper.
+- Display rate-limit windows such as 5H and 7D remaining percentage plus reset time.
 - Show a 30-day token usage calendar, total tokens, and today's tokens.
-- Local-only data reader: reads `~\.codex\sessions` rollout usage events, not auth files, cookies, or browser sessions.
+- Local-first Codex reader: reads `~\.codex\sessions` rollout usage events, not auth files, cookies, or browser sessions.
+- Generic JSON/HTTP schema for Claude Code, Cursor, Gemini CLI, Aider, OpenHands, or your own scripts.
 - Audio-responsive visualizer using Wallpaper Engine Web audio.
 - Layered 2.5D parallax scene with configurable background image.
 - Optional Wallpaper Engine media integration overlay for current track title, artist, and album art.
