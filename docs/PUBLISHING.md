@@ -26,10 +26,10 @@ Suggested description:
 Desktop AI Agent quota and token dashboard for Codex, Claude Code, Cursor, and custom agents. Wallpaper Engine dynamic wallpaper.
 ```
 
-Suggested topics:
+Suggested topics (space-separated):
 
 ```text
-codex, ai-agent, claude-code, cursor, wallpaper-engine, dynamic-wallpaper, token-usage, quota-dashboard, desktop-widget, productivity
+codex ai-agent claude-code cursor wallpaper-engine dynamic-wallpaper token-usage quota-dashboard desktop-widget productivity
 ```
 
 Suggested release title:

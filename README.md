@@ -1,28 +1,28 @@
 # AI Agent Usage Wallpaper / Codex Agent Usage Visualizer
 
-把 AI Agent 的剩余额度、Token 使用量和当前播放信息直接放到桌面上。  
-Turn your desktop into a live quota and token dashboard for Codex and other AI agents.
+语言：中文 | [English](README_EN.md)
+
+把 AI Agent 的剩余额度、Token 使用量和当前播放信息直接放到桌面上。
 
 ![Preview](assets/preview.png)
 
-## 适合谁 / Who This Is For
+## 适合谁
 
 - 每天高频使用 Codex、Claude Code、Cursor、Gemini CLI、Aider 或自建 Agent 的人。
 - 想在桌面上一眼看到 5H / 7D 等限额窗口还剩多少的人。
 - 想记录 Token 使用节奏，把 AI 工具从“感觉快用完了”变成“我知道还剩多少”的人。
-- Anyone who wants a calm desktop dashboard for AI quota, token history, media artwork, and a little motion.
 
-## 亮点 / Highlights
+## 亮点
 
-- **多 AI Agent 可接入 / Multi-agent ready**：内置 Codex 本地适配器，也支持任何 Agent 写入同样结构的 JSON 或 HTTP 数据源。
-- **桌面额度仪表盘 / Desktop quota dashboard**：显示 5H、7D 或自定义窗口的剩余百分比和重置时间。
-- **Token 日历 / Token calendar**：近 30 天 Token 使用热力图，像 GitHub contribution graph 一样扫一眼就懂。
-- **本地优先 / Local-first**：Codex 适配器只读本机 `~\.codex\sessions` usage/rate-limit 事件，不读登录凭据、cookie、浏览器状态或账号密码。
-- **Wallpaper Engine 原生媒体封面 / Native media artwork**：通过 Wallpaper Engine 官方媒体集成显示当前歌曲标题、歌手和封面。
-- **可替换壁纸 / Bring your own image**：支持替换背景图、调整图片填充、面板位置、时间/播放器位置、颜色和透明度。
-- **轻量动态效果 / Subtle motion**：音频只轻微驱动背景明暗、饱和度和环境光，不抢画面主体。
+- **多 AI Agent 可接入**：内置 Codex 本地适配器，也支持任何 Agent 写入同样结构的 JSON 或 HTTP 数据源。
+- **桌面额度仪表盘**：显示 5H、7D 或自定义窗口的剩余百分比和重置时间。
+- **Token 日历**：近 30 天 Token 使用热力图，像 GitHub contribution graph 一样扫一眼就懂。
+- **本地优先**：Codex 适配器只读本机 `~\.codex\sessions` usage/rate-limit 事件，不读登录凭据、cookie、浏览器状态或账号密码。
+- **Wallpaper Engine 原生媒体封面**：通过 Wallpaper Engine 官方媒体集成显示当前歌曲标题、歌手和封面。
+- **可替换壁纸**：支持替换背景图、调整图片填充、面板位置、时间/播放器位置、颜色和透明度。
+- **轻量动态效果**：音频只轻微驱动背景明暗、饱和度和环境光，不抢画面主体。
 
-## 多 Agent 接入 / Multi-Agent Data Sources
+## 多 Agent 接入
 
 默认包里已经包含 Codex 适配器，可以读取本地 Codex App 已缓存的 usage/rate-limit 事件。除此之外，任何工具都可以接入：
 
@@ -31,7 +31,7 @@ Turn your desktop into a live quota and token dashboard for Codex and other AI a
 - 或者提供一个 HTTP endpoint，例如 `http://127.0.0.1:47622/status`。
 - 只要输出 README 下方的通用 JSON 结构，壁纸就能显示 provider、quota windows、daily tokens、total tokens 和 today tokens。
 
-This wallpaper is not locked to Codex. Codex is just the included adapter. Any local or remote agent can feed the same JSON schema and become the dashboard provider.
+这个壁纸不是 Codex 专用。Codex 只是内置适配器；任何本地或远程 Agent 都可以输出同样的 JSON schema，成为桌面仪表盘的数据源。
 
 ## 导入 Wallpaper Engine
 
