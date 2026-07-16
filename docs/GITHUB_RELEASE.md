@@ -1,4 +1,4 @@
-# Codex Agent Usage Visualizer v1.0.2
+# Codex Agent Usage Visualizer v1.0.3
 
 Wallpaper Engine Web wallpaper for AI Agent power users and multi-agent workflows.
 
@@ -9,6 +9,7 @@ English: A desktop AI quota and token dashboard for Codex, Claude Code, Cursor, 
 
 - Show Codex or custom AI Agent remaining usage directly on the desktop wallpaper.
 - Display rate-limit windows such as 5H and 7D remaining percentage plus reset time.
+- Dynamically infers quota labels from `window_minutes`, so weekly-only ChatGPT/Codex limits render as `7D` instead of a broken `5H` slot.
 - Show a 30-day token usage calendar, total tokens, and today's tokens.
 - Local-first Codex reader: reads `~\.codex\sessions` rollout usage events, not auth files, cookies, or browser sessions.
 - Generic JSON/HTTP schema for Claude Code, Cursor, Gemini CLI, Aider, OpenHands, or your own scripts.
@@ -18,7 +19,7 @@ English: A desktop AI quota and token dashboard for Codex, Claude Code, Cursor, 
 
 ## Files
 
-- `codex-agent-wallpaper-v1.0.2.zip`: release package.
+- `codex-agent-wallpaper-v1.0.3.zip`: release package.
 - `install-autostart.cmd`: one-time setup for the local Codex usage endpoint.
 - `start-codex-usage-server.cmd`: manually start the local endpoint.
 - `README.md`: setup and customization guide.

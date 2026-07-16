@@ -35,7 +35,7 @@ codex ai-agent claude-code cursor wallpaper-engine dynamic-wallpaper token-usage
 Suggested release title:
 
 ```text
-v1.0.2 - AI Agent quota and token dashboard
+v1.0.3 - Dynamic quota windows for ChatGPT/Codex
 ```
 
 Upload:

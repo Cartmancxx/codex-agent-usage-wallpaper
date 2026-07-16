@@ -76,8 +76,8 @@ http://127.0.0.1:47621/status
 本项目额外提供了 `tools/codex-usage-export.py`，它默认读取当前 Windows 用户的 `~\.codex\sessions` rollout usage 事件。不同用户的 Codex 路径不需要手动写死：
 
 - `payload.info.last_token_usage`：累加本周/本月 Token。
-- `payload.rate_limits.primary`：Codex 返回的 5 小时窗口使用百分比。
-- `payload.rate_limits.secondary`：Codex 返回的 7 天窗口使用百分比。
+- `payload.rate_limits.*.used_percent`：Codex/ChatGPT 返回的额度窗口使用百分比。
+- `payload.rate_limits.*.window_minutes`：用于推断窗口标签，例如 `300` 显示为 `5H`，`10080` 显示为 `7D`。
 
 启动实时数据源：
 

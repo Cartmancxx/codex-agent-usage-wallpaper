@@ -131,6 +131,16 @@ def clamp_percent(value):
     return min(100.0, max(0.0, float(value)))
 
 
+def window_duration_label(minutes):
+    if not isinstance(minutes, (int, float)) or minutes <= 0:
+        return None
+    if minutes % 1440 == 0:
+        return f"{int(minutes / 1440)}D"
+    if minutes % 60 == 0:
+        return f"{int(minutes / 60)}H"
+    return f"{int(minutes)}m"
+
+
 def rate_window(rate_limits, window_name, label, tz):
     if not isinstance(rate_limits, dict):
         return None
@@ -145,12 +155,14 @@ def rate_window(rate_limits, window_name, label, tz):
     reset_iso = None
     if isinstance(reset_epoch, (int, float)):
         reset_iso = datetime.fromtimestamp(reset_epoch, timezone.utc).astimezone(tz).isoformat()
+    window_minutes = window.get("window_minutes")
+    inferred_label = window.get("label") or window_duration_label(window_minutes) or label
     return {
         "key": window_name,
-        "label": label,
+        "label": inferred_label,
         "usedPercent": round(used_percent, 1),
         "remainingPercent": round(100.0 - used_percent, 1),
-        "windowMinutes": window.get("window_minutes"),
+        "windowMinutes": window_minutes,
         "resetsAt": reset_iso,
         "resetsAtEpoch": reset_epoch,
     }
@@ -160,10 +172,21 @@ def build_status(codex_home, tz_name):
     tz = ZoneInfo(tz_name)
     usage = read_rollout_usage(codex_home, tz)
     rate = usage["latest_rate"] or {}
-    primary = rate_window(rate, "primary", "5小时", tz)
-    secondary = rate_window(rate, "secondary", "1周", tz)
-    windows = [item for item in (primary, secondary) if item is not None]
-    main_window = secondary or primary or {
+    windows = []
+    seen_window_keys = set()
+    for key in ("primary", "secondary"):
+        item = rate_window(rate, key, "额度", tz)
+        if item is not None:
+            windows.append(item)
+            seen_window_keys.add(key)
+    for key in sorted(rate.keys()):
+        if key in seen_window_keys or key in {"limit_id", "plan_type"}:
+            continue
+        item = rate_window(rate, key, "额度", tz)
+        if item is not None:
+            windows.append(item)
+            seen_window_keys.add(key)
+    main_window = next((item for item in windows if item.get("key") == "secondary" or item.get("label") in ("1周", "7D") or (item.get("windowMinutes") or 0) >= 10080), None) or (windows[0] if windows else None) or {
         "key": "unknown",
         "label": "额度",
         "usedPercent": 0.0,

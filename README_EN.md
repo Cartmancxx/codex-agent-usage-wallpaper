@@ -77,8 +77,8 @@ The server reads `agent-status.local.json` by default. If that file does not exi
 The project also includes `tools/codex-usage-export.py`. It reads rollout usage events from the current Windows user's `~\.codex\sessions` directory. User-specific Codex paths are not hard-coded.
 
 - `payload.info.last_token_usage`: aggregated into weekly/monthly/daily token stats.
-- `payload.rate_limits.primary`: Codex's 5-hour window usage percentage.
-- `payload.rate_limits.secondary`: Codex's 7-day window usage percentage.
+- `payload.rate_limits.*.used_percent`: quota window usage percentage returned by Codex/ChatGPT.
+- `payload.rate_limits.*.window_minutes`: used to infer the display label, for example `300` becomes `5H` and `10080` becomes `7D`.
 
 Start the live local endpoint:
 

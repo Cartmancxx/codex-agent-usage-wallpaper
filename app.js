@@ -58,12 +58,7 @@
     panel: document.getElementById("agentPanel"),
     providerName: document.getElementById("providerName"),
     liveState: document.getElementById("liveState"),
-    quota5hPercent: document.getElementById("quota5hPercent"),
-    quota5hReset: document.getElementById("quota5hReset"),
-    quota5hBar: document.getElementById("quota5hBar"),
-    quota7dPercent: document.getElementById("quota7dPercent"),
-    quota7dReset: document.getElementById("quota7dReset"),
-    quota7dBar: document.getElementById("quota7dBar"),
+    quotaBlock: document.getElementById("quotaBlock"),
     tokenCalendar: document.getElementById("tokenCalendar"),
     calendarRange: document.getElementById("calendarRange"),
     totalTokens: document.getElementById("totalTokens"),
@@ -168,19 +163,64 @@
     return `${year}-${month}-${day}`;
   }
 
-  function getQuotaWindow(status, key, label) {
-    return (
-      status.quotaWindows.find((item) => item.key === key) ||
-      status.quotaWindows.find((item) => item.label === label) ||
-      null
-    );
+  function formatWindowDuration(minutes) {
+    const value = Number(minutes);
+    if (!Number.isFinite(value) || value <= 0) return "";
+    if (value % 1440 === 0) return `${value / 1440}D`;
+    if (value % 60 === 0) return `${value / 60}H`;
+    return `${Math.round(value)}m`;
   }
 
-  function setQuotaLine(percentEl, resetEl, barEl, item) {
-    const remaining = item ? item.remainingPercent : 0;
-    percentEl.textContent = item ? formatPercent(remaining) : "--";
-    resetEl.textContent = item ? formatResetTime(item.resetsAt) : "--";
-    barEl.style.width = `${clamp(remaining, 0, 100)}%`;
+  function quotaWindowLabel(input, fallbackLabel, fallbackKey) {
+    const explicit = input?.label || input?.name;
+    if (explicit && !/^primary$|^secondary$/i.test(String(explicit))) return String(explicit);
+    const duration = formatWindowDuration(asNumber(input?.windowMinutes, input?.window_minutes));
+    if (duration) return duration;
+    if (fallbackLabel && !/^primary$|^secondary$/i.test(String(fallbackLabel))) return fallbackLabel;
+    return fallbackKey === "secondary" ? "7D" : "额度";
+  }
+
+  function quotaWindowTitle(item) {
+    const label = quotaWindowLabel(item, item?.label, item?.key);
+    return /剩余|remaining/i.test(label) ? label : `${label} 剩余用量`;
+  }
+
+  function renderQuotaWindows(status) {
+    els.quotaBlock.textContent = "";
+    const windows = status.quotaWindows.length
+      ? status.quotaWindows
+      : [{
+          label: status.quotaLabel || "额度",
+          remainingPercent: status.quotaRemainingPercent,
+          usedPercent: status.quotaUsedPercent,
+          resetsAt: status.quotaResetsAt,
+        }];
+
+    for (const item of windows.slice(0, 3)) {
+      const remaining = clamp(item.remainingPercent, 0, 100);
+      const line = document.createElement("div");
+      line.className = "quota-line";
+
+      const copy = document.createElement("div");
+      const label = document.createElement("span");
+      label.textContent = quotaWindowTitle(item);
+      const percent = document.createElement("strong");
+      percent.textContent = formatPercent(remaining);
+      copy.append(label, percent);
+
+      const reset = document.createElement("time");
+      reset.textContent = formatResetTime(item.resetsAt);
+
+      const bar = document.createElement("div");
+      bar.className = "quota-bar";
+      bar.setAttribute("aria-hidden", "true");
+      const fill = document.createElement("i");
+      fill.style.width = `${remaining}%`;
+      bar.append(fill);
+
+      line.append(copy, reset, bar);
+      els.quotaBlock.append(line);
+    }
   }
 
   function applyMotion() {
@@ -382,7 +422,7 @@
       if (remainingPercent == null) return;
       quotaWindows.push({
         key: input.key || fallbackKey || fallbackLabel,
-        label: input.label || fallbackLabel || "额度",
+        label: quotaWindowLabel(input, fallbackLabel, fallbackKey),
         usedPercent: clamp(usedPercent == null ? 100 - remainingPercent : usedPercent, 0, 100),
         remainingPercent: clamp(remainingPercent, 0, 100),
         resetsAt: input.resetsAt || input.resets_at || null,
@@ -393,8 +433,12 @@
     if (Array.isArray(quota.windows)) {
       for (const item of quota.windows) pushWindow(item);
     }
-    pushWindow(rateLimits.primary, "5小时", "primary");
-    pushWindow(rateLimits.secondary, "1周", "secondary");
+    pushWindow(rateLimits.primary, null, "primary");
+    pushWindow(rateLimits.secondary, null, "secondary");
+    for (const [key, value] of Object.entries(rateLimits)) {
+      if (["primary", "secondary", "latestAt", "limitId", "planType"].includes(key)) continue;
+      pushWindow(value, null, key);
+    }
 
     const seenWindows = new Set();
     const dedupedWindows = quotaWindows.filter((item) => {
@@ -435,7 +479,7 @@
     usedMinutes = clamp(usedMinutes || 0, 0, Math.max(totalMinutes, usedMinutes || 0));
 
     const mainWindow =
-      dedupedWindows.find((item) => item.key === "secondary" || item.label === "1周") ||
+      dedupedWindows.find((item) => item.key === "secondary" || item.label === "1周" || item.label === "7D" || item.windowMinutes >= 10080) ||
       dedupedWindows[0] ||
       null;
     let remainingPercent = asNumber(quota.remainingPercent, quota.remaining_percent);
@@ -469,18 +513,7 @@
   function renderStatus(status, health = "live") {
     currentStatus = status;
     els.providerName.textContent = status.provider;
-    setQuotaLine(
-      els.quota5hPercent,
-      els.quota5hReset,
-      els.quota5hBar,
-      getQuotaWindow(status, "primary", "5小时"),
-    );
-    setQuotaLine(
-      els.quota7dPercent,
-      els.quota7dReset,
-      els.quota7dBar,
-      getQuotaWindow(status, "secondary", "1周"),
-    );
+    renderQuotaWindows(status);
     els.totalTokens.textContent = formatCompactNumber(status.totalTokens);
     els.todayTokens.textContent = formatCompactNumber(status.todayTokens);
     els.updatedAt.textContent = formatDateTime(status.updatedAt);
